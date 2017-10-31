@@ -1,44 +1,85 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>A Song of Ice and Fire</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
+<head>
+  <meta charset="utf-8">
+  <title>A Song of Ice and Fire</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
-  </head>
-  <body>
-    <div class="container">
 
-      <div class="row">
-        <div class="col">
-          <h1>A Song of Ice and Fire Character Sheet</h1>
-          <hr>
-        </div>
-      </div>
 
-      <div class="row">
-        <div class="col">
-          <h2> Alive! (for now)</h2>
-          <ul class="list-group">
-            <li class="list-group-item">Cras justo odio</li>
-            <li class="list-group-item">Dapibus ac facilisis in</li>
-            <li class="list-group-item">Morbi leo risus</li>
-            <li class="list-group-item">Porta ac consectetur ac</li>
-            <li class="list-group-item">Vestibulum at eros</li>
-          </ul>
-        </div>
+</head>
 
-        <div class="col">
-          <h2>Dead! (Got the Greyscale)</h2>
-          <ul class="list-group">
-            <li class="list-group-item">Cras justo odio</li>
-            <li class="list-group-item">Dapibus ac facilisis in</li>
-            <li class="list-group-item">Morbi leo risus</li>
-            <li class="list-group-item">Porta ac consectetur ac</li>
-            <li class="list-group-item">Vestibulum at eros</li>
-          </ul>
-        </div>
+<body>
+  <div class="container">
+
+    <div class="row">
+      <div class="col">
+        <h1>A Song of Ice and Fire Character Sheet</h1>
+        <hr>
       </div>
     </div>
-  </body>
+
+    <div class="row">
+      <div class="col">
+        <h2> Alive! (for now)</h2>
+        <ul id="listgroup1">
+
+        </ul>
+      </div>
+
+      <div class="col">
+        <h2>Dead! (Got the Greyscale)</h2>
+        <ul id="listgroup2">
+
+
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let searchAliveURL = ('https://www.anapioficeandfire.com/api/characters?page=1&pageSize=1000&isAlive=true')
+    axios(searchAliveURL).then(response => {
+      loopLiving(response.data)
+    })
+
+    function loopLiving(info) {
+      for (alivePeople of info) {
+        if (alivePeople.name) {
+          let ul1 = document.getElementById("listgroup1")
+          ul1.insertAdjacentHTML('beforeend', `<li class="list-group-item">${alivePeople.name}</li>`)
+        }
+        if (alivePeople.aliases) {
+          let ul1 = document.getElementById("listgroup1")
+          ul1.insertAdjacentHTML('beforeend', `<li class="list-group-item">${alivePeople.aliases[0]}</li>`)
+        }
+      }
+    }
+
+  let searchDeadURL = ('https://www.anapioficeandfire.com/api/characters?page=1&pageSize=1000&isAlive=false')
+    axios(searchDeadURL).then(response => {
+      loopDead(response.data)
+    })
+
+    function loopDead(data) {
+      for (deadPeople of data) {
+        if (deadPeople.name !== "") {
+          let ul1 = document.getElementById("listgroup2")
+          ul1.insertAdjacentHTML('beforeend', `<li class="list-group-item">${deadPeople.name}</li>`)
+        }
+        if (deadPeople.aliases.length) {
+          let ul1 = document.getElementById("listgroup2")
+          ul1.insertAdjacentHTML('beforeend', `<li class="list-group-item">${deadPeople.aliases[0]}</li>`)
+        }
+      }
+    }
+
+
+  </script>
+
+</body>
+
 </html>
